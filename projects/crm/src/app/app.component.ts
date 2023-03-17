@@ -20,10 +20,12 @@ import { Component } from '@angular/core';
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link" routerLink="/invoices">Factures</a>
+              <!-- <a class="nav-link" routerLink="/invoices">Factures</a>-->
+              <a class="nav-link" routerLink="#">Factures</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/invoices/create">+ Créer</a>
+              <!--<a class="nav-link" routerLink="/invoices/create">+ Créer</a>-->
+              <a class="nav-link" routerLink="#">+ Créer</a>
             </li>
           </ul>
           <ul class="navbar-nav">
