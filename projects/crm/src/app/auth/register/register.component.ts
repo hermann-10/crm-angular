@@ -1,5 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -57,7 +64,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
           <input
             formControlName="confirmPassword"
             [class.is-invalid]="
-              confirmPassword.invalid && confirmPassword.touched
+              (confirmPassword.invalid || registerForm.hasError('confirm')) &&
+              confirmPassword.touched
             "
             type="password"
             placeholder="Confirmez votre mot de passe"
@@ -66,7 +74,20 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
             class="mb-3 form-control"
           />
 
-          <p class="invalid-feedback">
+          <p
+            class="invalid-feedback"
+            *ngIf="confirmPassword.hasError('required')"
+          >
+            La confirmation du mot de passe est obligatoire
+          </p>
+
+          <p
+            class="invalid-feedback"
+            *ngIf="
+              registerForm.hasError('confirm') &&
+              !confirmPassword.hasError('required')
+            "
+          >
             La confirmation ne correspond pas au mot de passe
           </p>
         </div>
@@ -79,20 +100,43 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styles: [],
 })
 export class RegisterComponent implements OnInit {
-  registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    name: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(5),
-      Validators.pattern(/\d+/),
-    ]),
-    confirmPassword: new FormControl('', [Validators.required]),
-  });
+  confirmPasswordValidator: ValidatorFn = (control: AbstractControl) => {
+    const password = control.get('password');
+    const confirm = control.get('confirmPassword');
 
-  constructor() {}
+    if (password?.value === confirm?.value) {
+      return null;
+    }
+    return {
+      confirm: true,
+    };
+  };
+
+  registerForm = new FormGroup(
+    {
+      email: new FormControl('', [Validators.required, Validators.email]),
+      name: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.pattern(/\d+/),
+      ]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    },
+    {
+      validators: this.confirmPasswordValidator,
+    }
+  );
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {}
+
+  uniqueEmailAsyncValidator(control: AbstractControl) {
+    //return this.http.post<{exists:boolean}>('LINK', {
+    //email: control.value
+    //})
+  }
 
   onSubmit() {
     console.log(this.registerForm.value);

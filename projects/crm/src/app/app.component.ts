@@ -22,10 +22,12 @@ import { Component } from '@angular/core';
             <li class="nav-item">
               <!-- <a class="nav-link" routerLink="/invoices">Factures</a>-->
               <a class="nav-link" routerLink="#">Factures</a>
+              <!-- Available soon -->
             </li>
             <li class="nav-item">
               <!--<a class="nav-link" routerLink="/invoices/create">+ Créer</a>-->
               <a class="nav-link" routerLink="#">+ Créer</a>
+              <!-- Available soon -->
             </li>
           </ul>
           <ul class="navbar-nav">
