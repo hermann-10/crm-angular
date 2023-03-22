@@ -8,6 +8,12 @@ export type RegisterData = {
     password: string;
 }
 
+export type LoginData = {
+  email: string;
+  password: string;
+};
+
+
 @Injectable()
 export class AuthService {
 
@@ -28,7 +34,12 @@ export class AuthService {
         .pipe(map((response) => response.exists));   
     }
 
-    login(){}
+    login(loginData: LoginData){
+        return this.http.post(
+          'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/auth/login',
+          loginData
+        );
+    }
 
     logout() {}
 
