@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormBuilder,
   FormControl,
   FormGroup,
   ValidatorFn,
@@ -21,7 +22,7 @@ import { AuthService, RegisterData } from '../auth.service';
       <form [formGroup]="registerForm" (submit)="(onSubmit)">
         <div>
           <div class="alert bg-warning" *ngIf="errorMessage">
-            {{errorMessage}}
+            {{ errorMessage }}
           </div>
           <label class="mb-1" for="name">Nom d'utilisateur</label>
           <input
@@ -130,38 +131,42 @@ export class RegisterComponent implements OnInit {
     };
   };
 
-  registerForm = new FormGroup(
+  registerForm = this.fb.group(
     {
-      email: new FormControl(
+      email: [
         '',
         [Validators.required, Validators.email],
-        [this.uniqueEmailAsyncValidator.bind(this)]
-      ),
-      name: new FormControl('', [Validators.required, Validators.minLength(5)]),
-      password: new FormControl('', [
+        [this.uniqueEmailAsyncValidator.bind(this)],
+      ],
+      name: ['', [Validators.required, Validators.minLength(5)]],
+      password: ['', [
         Validators.required,
         Validators.minLength(5),
         Validators.pattern(/\d+/),
-      ]),
-      confirmPassword: new FormControl('', [Validators.required]),
+      ]],
+      confirmPassword: ['', [Validators.required]],
     },
     {
       validators: this.confirmPasswordValidator,
-    });
+    }
+  );
 
-  constructor(private router: Router, private auth: AuthService ) {}
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {}
 
   uniqueEmailAsyncValidator(control: AbstractControl) {
-    return this.auth.exists(control.value)
-      .pipe(
-        map((exists) => (exists ? { uniqueEmail: true } : null))
-      );
+    return this.auth
+      .exists(control.value)
+      .pipe(map((exists) => (exists ? { uniqueEmail: true } : null)));
   }
 
   onSubmit() {
-    if(this.registerForm.invalid){
+    if (this.registerForm.invalid) {
       return;
     }
 
@@ -171,11 +176,12 @@ export class RegisterComponent implements OnInit {
       password: this.password.value!,
     };
 
-    this.auth.register(data)
-      .subscribe({
-        next: () => this.router.navigateByUrl('/'),
-        error: (error) => this.errorMessage = 'Un problème est survenu, merci de réessayer plus tard ou de contacter un(e) responsable.',
-      });
+    this.auth.register(data).subscribe({
+      next: () => this.router.navigateByUrl('/'),
+      error: (error) =>
+        (this.errorMessage =
+          'Un problème est survenu, merci de réessayer plus tard ou de contacter un(e) responsable.'),
+    });
   }
 
   get name() {
