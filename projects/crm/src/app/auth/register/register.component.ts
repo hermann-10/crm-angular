@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -7,6 +6,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { map } from 'rxjs';
+import { AuthService, RegisterData } from '../auth.service';
 
 @Component({
   selector: 'app-register',
@@ -18,6 +20,9 @@ import {
       </p>
       <form [formGroup]="registerForm" (submit)="(onSubmit)">
         <div>
+          <div class="alert bg-warning" *ngIf="errorMessage">
+            {{errorMessage}}
+          </div>
           <label class="mb-1" for="name">Nom d'utilisateur</label>
           <input
             formControlName="name"
@@ -41,7 +46,19 @@ import {
             id="email"
             class="mb-3 form-control"
           />
-          <p class="invalid-feedback">L'adresse email doit être valide</p>
+          <p
+            class="invalid-feedback"
+            *ngIf="email.hasError('required') || email.hasError('email')"
+          >
+            L'adresse email doit être valide
+          </p>
+          <!--<p class="text-info" *ngIf="email.pending">
+            <span class="spinner-border spinner-border-sm"> </span>
+            Chargement...
+          </p>-->
+          <p class="invalid-feedback" *ngIf="email.hasError('uniqueEmail')">
+            Cette adresse est déjà utilisée
+          </p>
         </div>
         <div>
           <label class="mb-1" for="password">Mot de passe</label>
@@ -100,6 +117,7 @@ import {
   styles: [],
 })
 export class RegisterComponent implements OnInit {
+  errorMessage = '';
   confirmPasswordValidator: ValidatorFn = (control: AbstractControl) => {
     const password = control.get('password');
     const confirm = control.get('confirmPassword');
@@ -114,7 +132,11 @@ export class RegisterComponent implements OnInit {
 
   registerForm = new FormGroup(
     {
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl(
+        '',
+        [Validators.required, Validators.email],
+        [this.uniqueEmailAsyncValidator.bind(this)]
+      ),
       name: new FormControl('', [Validators.required, Validators.minLength(5)]),
       password: new FormControl('', [
         Validators.required,
@@ -125,21 +147,35 @@ export class RegisterComponent implements OnInit {
     },
     {
       validators: this.confirmPasswordValidator,
-    }
-  );
+    });
 
-  constructor(private http: HttpClient) {}
+  constructor(private router: Router, private auth: AuthService ) {}
 
   ngOnInit(): void {}
 
   uniqueEmailAsyncValidator(control: AbstractControl) {
-    //return this.http.post<{exists:boolean}>('LINK', {
-    //email: control.value
-    //})
+    return this.auth.exists(control.value)
+      .pipe(
+        map((exists) => (exists ? { uniqueEmail: true } : null))
+      );
   }
 
   onSubmit() {
-    console.log(this.registerForm.value);
+    if(this.registerForm.invalid){
+      return;
+    }
+
+    const data: RegisterData = {
+      email: this.email.value!,
+      name: this.name.value!,
+      password: this.password.value!,
+    };
+
+    this.auth.register(data)
+      .subscribe({
+        next: () => this.router.navigateByUrl('/'),
+        error: (error) => this.errorMessage = 'Un problème est survenu, merci de réessayer plus tard ou de contacter un(e) responsable.',
+      });
   }
 
   get name() {
