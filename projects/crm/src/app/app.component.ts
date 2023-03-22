@@ -22,43 +22,49 @@ import { AuthService } from './auth/auth.service';
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav me-auto">
-            <li class="nav-item" *ngIf="isAuthenticated$ | async">
-              <!-- <a class="nav-link" routerLink="/invoices">Factures</a>-->
-              <a class="nav-link" routerLink="#">Factures</a>
-              <!-- Available soon -->
-            </li>
-            <li class="nav-item">
-              <!--<a class="nav-link" routerLink="/invoices/create">+ Créer</a>-->
-              <a class="nav-link" routerLink="#">+ Créer</a>
-              <!-- Available soon -->
-            </li>
+            <ng-container *authenticated="true">
+              <li class="nav-item">
+                <!-- <a class="nav-link" routerLink="/invoices">Factures</a>-->
+                <a class="nav-link" routerLink="#">Factures</a>
+                <!-- Available soon -->
+              </li>
+              <li class="nav-item">
+                <!--<a class="nav-link" routerLink="/invoices/create">+ Créer</a>-->
+                <a class="nav-link" routerLink="#">+ Créer</a>
+                <!-- Available soon -->
+              </li>
+            </ng-container>
           </ul>
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a
-                id="login"
-                routerLink="/account/login"
-                class="btn btn-success btn-sm"
-                >Connexion</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                id="register"
-                routerLink="/account/register"
-                class="btn btn-info btn-sm"
-                >Inscription</a
-              >
-            </li>
-            <li class="nav-item">
-              <button
-                id="logout"
-                class="btn btn-danger btn-sm"
-                (click)="onLogout()"
-              >
-                Déconnexion
-              </button>
-            </li>
+            <ng-container *authenticated="false">
+              <li class="nav-item">
+                <a
+                  id="login"
+                  routerLink="/account/login"
+                  class="btn btn-success btn-sm"
+                  >Connexion</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  id="register"
+                  routerLink="/account/register"
+                  class="btn btn-info btn-sm"
+                  >Inscription</a
+                >
+              </li>
+            </ng-container>
+            <ng-container *authenticated="true">
+              <li class="nav-item">
+                <button
+                  id="logout"
+                  class="btn btn-danger btn-sm"
+                  (click)="onLogout()"
+                >
+                  Déconnexion
+                </button>
+              </li>
+            </ng-container>
           </ul>
         </div>
       </div>
@@ -70,22 +76,11 @@ import { AuthService } from './auth/auth.service';
   styles: [],
 })
 export class AppComponent {
-  isAuthenticated$?: Observable<boolean>;
-  //isAuthenticated = false;
 
   constructor(private auth: AuthService, private router: Router) {}
 
-  ngOnInit() {
-    
-    this.isAuthenticated$ = this.auth.authStatus$;
-    
-    /*this.auth.authStatus$.subscribe((status) => {
-      this.isAuthenticated = status;
-    });*/
-  }
-
   onLogout() {
     this.auth.logout();
-    this.router.navigateByUrl('/account/login')
+    this.router.navigateByUrl('/account/login');
   }
 }
