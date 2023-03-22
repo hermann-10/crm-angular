@@ -1,13 +1,14 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, map, tap } from "rxjs";
-import { TokenManager } from "./token-manager.service";
+import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { BehaviorSubject, map, tap } from 'rxjs';
+import { TokenManager } from './token-manager';
+import { LocalStorageTokenManager } from './token-manager.service';
 
 export type RegisterData = {
-    email: string;
-    name: string;
-    password: string;
-}
+  email: string;
+  name: string;
+  password: string;
+};
 
 export type LoginData = {
   email: string;
@@ -15,6 +16,8 @@ export type LoginData = {
 };
 
 export type LoginApiResponse = { authToken: string };
+
+export const TOKEN_MANAGER = new InjectionToken('La classe à injecter pour stocker le token');
 
 @Injectable()
 export class AuthService {
@@ -48,8 +51,8 @@ export class AuthService {
         map((response) => response.authToken),
 
         tap((token) => {
-            this.tokenManager.storeToken(token);
-            this.authStatus$.next(true)
+          this.tokenManager.storeToken(token);
+          this.authStatus$.next(true);
         })
       );
   }
@@ -59,11 +62,14 @@ export class AuthService {
     this.tokenManager.removeToken();
   }
 
-  constructor(private http: HttpClient, private tokenManager: TokenManager) {
-    const token = this.tokenManager.loadToken();
-
-    if(token){
-      this.authStatus$.next(true); //I'm connected
-    }
+  constructor(
+    private http: HttpClient,
+    @Inject(TOKEN_MANAGER) private tokenManager: TokenManager
+  ) {
+    this.tokenManager.loadToken().subscribe((token) => {
+      if (token) {
+        this.authStatus$.next(true); //The user is connected
+      }
+    });
   }
 }
