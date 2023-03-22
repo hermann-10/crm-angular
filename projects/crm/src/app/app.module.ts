@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
+import { TokenManager } from './auth/token-manager.service';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -17,7 +18,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     SharedModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, TokenManager],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

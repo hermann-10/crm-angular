@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, map, tap } from "rxjs";
+import { TokenManager } from "./token-manager.service";
 
 export type RegisterData = {
     email: string;
@@ -18,7 +19,6 @@ export type LoginApiResponse = { authToken: string };
 @Injectable()
 export class AuthService {
   authStatus$ = new BehaviorSubject(false);
-  authToken: string | null = null;
 
   register(registerData: RegisterData) {
     return this.http.post(
@@ -48,7 +48,7 @@ export class AuthService {
         map((response) => response.authToken),
 
         tap((token) => {
-            this.authToken = token;
+            this.tokenManager.storeToken(token);
             this.authStatus$.next(true)
         })
       );
@@ -56,8 +56,14 @@ export class AuthService {
 
   logout() {
     this.authStatus$.next(false);
-    this.authToken = null;
+    this.tokenManager.removeToken();
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private tokenManager: TokenManager) {
+    const token = this.tokenManager.loadToken();
+
+    if(token){
+      this.authStatus$.next(true); //I'm connected
+    }
+  }
 }
