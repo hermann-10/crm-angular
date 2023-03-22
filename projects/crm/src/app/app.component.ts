@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +22,7 @@ import { Component } from '@angular/core';
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav me-auto">
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="isAuthenticated$ | async">
               <!-- <a class="nav-link" routerLink="/invoices">Factures</a>-->
               <a class="nav-link" routerLink="#">Factures</a>
               <!-- Available soon -->
@@ -48,7 +51,11 @@ import { Component } from '@angular/core';
               >
             </li>
             <li class="nav-item">
-              <button id="logout" class="btn btn-danger btn-sm">
+              <button
+                id="logout"
+                class="btn btn-danger btn-sm"
+                (click)="onLogout()"
+              >
                 Déconnexion
               </button>
             </li>
@@ -62,4 +69,23 @@ import { Component } from '@angular/core';
   `,
   styles: [],
 })
-export class AppComponent {}
+export class AppComponent {
+  isAuthenticated$?: Observable<boolean>;
+  //isAuthenticated = false;
+
+  constructor(private auth: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    
+    this.isAuthenticated$ = this.auth.authStatus$;
+    
+    /*this.auth.authStatus$.subscribe((status) => {
+      this.isAuthenticated = status;
+    });*/
+  }
+
+  onLogout() {
+    this.auth.logout();
+    this.router.navigateByUrl('/account/login')
+  }
+}

@@ -21,6 +21,6 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [AuthService]
+  providers: []
 })
 export class AuthModule {}

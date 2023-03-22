@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map } from "rxjs";
+import { BehaviorSubject, map, tap } from "rxjs";
 
 export type RegisterData = {
     email: string;
@@ -13,35 +13,51 @@ export type LoginData = {
   password: string;
 };
 
+export type LoginApiResponse = { authToken: string };
 
 @Injectable()
 export class AuthService {
+  authStatus$ = new BehaviorSubject(false);
+  authToken: string | null = null;
 
-    register(registerData: RegisterData){
-        return this.http.post(
-          'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/auth/signup',
-          registerData
-        );
-    }
+  register(registerData: RegisterData) {
+    return this.http.post(
+      'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/auth/signup',
+      registerData
+    );
+  }
 
-    exists(email: string){
-        return this.http.post<{ exists: boolean }>(
-          'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/user/validation/exists',
-          {
-            email,
-          }
-        )
-        .pipe(map((response) => response.exists));   
-    }
+  exists(email: string) {
+    return this.http
+      .post<{ exists: boolean }>(
+        'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/user/validation/exists',
+        {
+          email,
+        }
+      )
+      .pipe(map((response) => response.exists));
+  }
 
-    login(loginData: LoginData){
-        return this.http.post(
-          'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/auth/login',
-          loginData
-        );
-    }
+  login(loginData: LoginData) {
+    return this.http
+      .post<LoginApiResponse>(
+        'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/auth/login',
+        loginData
+      )
+      .pipe(
+        map((response) => response.authToken),
 
-    logout() {}
+        tap((token) => {
+            this.authToken = token;
+            this.authStatus$.next(true)
+        })
+      );
+  }
 
-    constructor(private http: HttpClient) {}
+  logout() {
+    this.authStatus$.next(false);
+    this.authToken = null;
+  }
+
+  constructor(private http: HttpClient) {}
 }
