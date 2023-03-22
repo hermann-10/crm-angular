@@ -24,13 +24,12 @@ import { AuthService } from './auth/auth.service';
           <ul class="navbar-nav me-auto">
             <ng-container *authenticated="true">
               <li class="nav-item">
-                <!-- <a class="nav-link" routerLink="/invoices">Factures</a>-->
-                <a class="nav-link" routerLink="#">Factures</a>
+                <a class="nav-link" routerLink="/invoices">Factures</a>
                 <!-- Available soon -->
               </li>
               <li class="nav-item">
-                <!--<a class="nav-link" routerLink="/invoices/create">+ Créer</a>-->
-                <a class="nav-link" routerLink="#">+ Créer</a>
+                <a class="nav-link" routerLink="/invoices/create">+ Créer</a>
+            
                 <!-- Available soon -->
               </li>
             </ng-container>
