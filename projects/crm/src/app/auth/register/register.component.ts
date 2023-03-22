@@ -53,10 +53,10 @@ import { AuthService, RegisterData } from '../auth.service';
           >
             L'adresse email doit être valide
           </p>
-          <!--<p class="text-info" *ngIf="email.pending">
+          <p class="text-info" *ngIf="email.pending">
             <span class="spinner-border spinner-border-sm"> </span>
             Chargement...
-          </p>-->
+          </p>
           <p class="invalid-feedback" *ngIf="email.hasError('uniqueEmail')">
             Cette adresse est déjà utilisée
           </p>

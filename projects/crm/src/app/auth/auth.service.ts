@@ -38,7 +38,10 @@ export class AuthService {
           email,
         }
       )
-      .pipe(map((response) => response.exists));
+      .pipe(
+        map((response) => response.exists),
+        map((exists) => (exists ? { uniqueEmail: true} : null))
+      );
   }
 
   login(loginData: LoginData) {
