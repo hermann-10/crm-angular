@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-invoice-creation',
@@ -173,18 +173,34 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styles: [],
 })
 export class InvoiceCreationComponent implements OnInit {
-  invoiceForm = this.fb.group({
-    customer_name: ['', [Validators.required, Validators.minLength(5)]],
-    description: ['', [Validators.required, Validators.minLength(10)]],
-    status: [''],
-    details: this.fb.array<
-      FormGroup<{
-        description: FormControl;
-        amount: FormControl;
-        quantity: FormControl;
-      }>
-    >([]),
-  });
+  
+  detailsExistsValidator: ValidatorFn = (control: AbstractControl) => {
+    const details = control.get('details') as FormArray;
+
+    return details.length > 0
+      ? null
+      : {
+          noDetails: true,
+        };
+  };
+
+  invoiceForm = this.fb.group(
+    {
+      customer_name: ['', [Validators.required, Validators.minLength(5)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      status: [''],
+      details: this.fb.array<
+        FormGroup<{
+          description: FormControl;
+          amount: FormControl;
+          quantity: FormControl;
+        }>
+      >([]),
+    },
+    {
+      validators: this.detailsExistsValidator,
+    }
+  );
 
   constructor(private fb: FormBuilder) {}
 
@@ -235,6 +251,6 @@ export class InvoiceCreationComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.invoiceForm.value);
+    console.log(this.invoiceForm.valid);
   }
 }
