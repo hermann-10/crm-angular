@@ -4,6 +4,7 @@ import { InvoiceCreationComponent } from './invoice-creation/invoice-creation.co
 import { InvoiceEditionComponent } from './invoice-edition/invoice-edition.component';
 import { InvoicesListComponent } from './invoices-list/invoices-list.component';
 import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', component: InvoicesListComponent },
@@ -17,6 +18,6 @@ const routes: Routes = [
     InvoiceEditionComponent,
     InvoicesListComponent,
   ],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, RouterModule.forChild(routes), ReactiveFormsModule],
 })
 export class InvoiceModule {}
