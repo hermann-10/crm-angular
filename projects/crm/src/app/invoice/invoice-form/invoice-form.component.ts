@@ -29,25 +29,7 @@ import {
 
       <hr />
 
-      <div class="row">
-        <div class="col-6 text-end">Total HT :</div>
-        <div class="col" id="total_ht">
-          {{ total | currency : 'CHF' : 'symbol' : undefined : 'fr' }}
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-6 text-end">Total TVA :</div>
-        <div class="col" id="total_tva">
-          {{ totalTVA | currency : 'CHF' : 'symbol' : undefined : 'fr' }}
-        </div>
-      </div>
-      <div class="row fw-bold">
-        <div class="col-6 text-end">Total TTC :</div>
-        <div class="col" id="total_ttc">
-          {{ totalTTC | currency : 'CHF' : 'symbol' : undefined : 'fr' }}
-        </div>
-      </div>
+      <app-invoice-form-totals [total]="total"></app-invoice-form-totals>
 
       <button class="mt-3 w-sm-auto btn btn-success" id="submit">
         Enregistrer
@@ -90,18 +72,6 @@ export class InvoiceFormComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  get customerName() {
-    return this.invoiceForm.controls.customer_name;
-  }
-
-  get description() {
-    return this.invoiceForm.controls.description;
-  }
-
-  get status() {
-    return this.invoiceForm.controls.status;
-  }
-
   get details() {
     return this.invoiceForm.controls.details;
   }
@@ -112,13 +82,7 @@ export class InvoiceFormComponent implements OnInit {
     }, 0);
   }
 
-  get totalTVA() {
-    return this.total * 0.2;
-  }
-
-  get totalTTC() {
-    return this.total + this.totalTVA;
-  }
+ 
 
   onAddDetails() {
     this.details.push(
