@@ -8,6 +8,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Invoice } from '../invoice';
 import { InvoiceFormType } from './invoice-form-type';
 
 @Component({
@@ -41,7 +42,7 @@ import { InvoiceFormType } from './invoice-form-type';
 })
 export class InvoiceFormComponent implements OnInit {
 
-  @Output('invoice-submit') invoiceSubmitEvent = new EventEmitter<any>();
+  @Output('invoice-submit') invoiceSubmitEvent = new EventEmitter<Invoice>();
   
   detailsExistsValidator: ValidatorFn = (control: AbstractControl) => {
     const details = control.get('details') as FormArray;
@@ -106,7 +107,7 @@ export class InvoiceFormComponent implements OnInit {
     if(this.invoiceForm.invalid){
       return;
     }
-    this.invoiceSubmitEvent.emit(this.invoiceForm.value);
+    this.invoiceSubmitEvent.emit(this.invoiceForm.value as Invoice);
   }
 
 }
