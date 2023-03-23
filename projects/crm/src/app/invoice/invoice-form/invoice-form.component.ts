@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -40,6 +40,8 @@ import { InvoiceFormType } from './invoice-form-type';
   styles: [],
 })
 export class InvoiceFormComponent implements OnInit {
+
+  @Output('invoice-submit') invoiceSubmitEvent = new EventEmitter<any>();
   
   detailsExistsValidator: ValidatorFn = (control: AbstractControl) => {
     const details = control.get('details') as FormArray;
@@ -100,7 +102,11 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.invoiceForm.value);
+
+    if(this.invoiceForm.invalid){
+      return;
+    }
+    this.invoiceSubmitEvent.emit(this.invoiceForm.value);
   }
 
 }
