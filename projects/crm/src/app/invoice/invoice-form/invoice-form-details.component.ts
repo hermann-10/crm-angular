@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 
 @Component({
@@ -87,7 +87,7 @@ import { FormGroup, FormControl, FormArray } from '@angular/forms';
   `,
   styles: [],
 })
-export class InvoiceFormDetailsComponent implements OnInit {
+export class InvoiceFormDetailsComponent {
   @Output('details-removded') 
   detailsRemovedEvent = new EventEmitter<number>();
 
@@ -111,8 +111,4 @@ export class InvoiceFormDetailsComponent implements OnInit {
   get details() {
     return this.parent?.controls.details;
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }
