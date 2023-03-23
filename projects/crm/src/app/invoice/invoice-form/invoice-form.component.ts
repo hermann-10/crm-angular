@@ -8,6 +8,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { InvoiceFormType } from './invoice-form-type';
 
 @Component({
   selector: 'app-invoice-form',
@@ -50,7 +51,7 @@ export class InvoiceFormComponent implements OnInit {
         };
   };
 
-  invoiceForm = this.fb.group(
+  invoiceForm: InvoiceFormType = this.fb.group(
     {
       customer_name: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
