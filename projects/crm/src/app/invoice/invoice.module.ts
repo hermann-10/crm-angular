@@ -7,6 +7,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import localeFr from '@angular/common/locales/fr';
+import { InvoiceFormComponent } from './invoice-form/invoice-form.component';
+import { InvoiceFormGeneralComponent } from './invoice-form/invoice-form-general.component';
+import { InvoiceFormDetailsComponent } from './invoice-form/invoice-form-details.component';
+import { InvoiceFormTotalsComponent } from './invoice-form/invoice-form-totals.component';
 
 registerLocaleData(localeFr);
 
@@ -21,6 +25,10 @@ const routes: Routes = [
     InvoiceCreationComponent,
     InvoiceEditionComponent,
     InvoicesListComponent,
+    InvoiceFormComponent,
+    InvoiceFormGeneralComponent,
+    InvoiceFormDetailsComponent,
+    InvoiceFormTotalsComponent,
   ],
   imports: [CommonModule, RouterModule.forChild(routes), ReactiveFormsModule],
 })
