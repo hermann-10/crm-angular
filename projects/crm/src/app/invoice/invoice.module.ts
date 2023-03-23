@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { InvoiceCreationComponent } from './invoice-creation/invoice-creation.component';
 import { InvoiceEditionComponent } from './invoice-edition/invoice-edition.component';
 import { InvoicesListComponent } from './invoices-list/invoices-list.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
 
 const routes: Routes = [
   { path: '', component: InvoicesListComponent },
