@@ -1,37 +1,57 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { switchMap, tap } from "rxjs";
+import { environment } from "../../environments/environment";
+import { AuthService } from "../auth/auth.service";
 import { Invoice } from "./invoice";
+
+const API_URL = environment.API_URL;
 
 @Injectable()
 export class invoiceService {
-    constructor(private http: HttpClient){}
+    constructor(private http: HttpClient, private auth: AuthService){}
 
     create(invoiceData: Invoice){
-        return this.http.post<Invoice>(
-          'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/invoice', invoiceData
+        return this.auth.authToken.pipe(
+          tap((token) => {
+            if (!token) {
+              throw new Error('Unauthenticated');
+            }
+          }),
+          switchMap((token) => {
+            return this.http.post<Invoice>(
+              API_URL + '/invoice',
+              invoiceData,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+          })
         );
     }
 
     update(invoiceData: Invoice){
         return this.http.put<Invoice>(
-          'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/invoice/' + invoiceData.id, invoiceData
+          API_URL + '/invoice/' + invoiceData.id, invoiceData
         );
     }
 
     delete(id: number){
         return this.http.delete(
-          'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/invoice/'+ id)   
+          API_URL + '/invoice/'+ id)   
         }
 
         findAll() {
             return this.http.get<Invoice[]>(
-              'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/invoice'
+              API_URL + '/invoice'
             );
         }
 
         find(id: number){
             return this.http.get(
-              'https://x8ki-letl-twmt.n7.xano.io/api:SYp5DbIo/invoice/'+ id
+              API_URL + '/invoice/'+ id
             );
         }
 }
