@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Invoice } from '../invoice';
+import { invoiceService } from '../invoice.service';
 
 @Component({
   selector: 'app-invoices-list',
@@ -10,22 +13,29 @@ import { Component, OnInit } from '@angular/core';
         <thead>
           <tr>
             <th>Id.</th>
+            <th>Client</th>
             <th>Description</th>
             <th>Date</th>
-            <th class="text-center">Total HT</th>
-            <th class="text-center">Statut</th>
+            <th>Total HT</th>
+            <th>Statut</th>
             <th></th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Refonte du site web du restaurant</td>
-            <td>22/01/2022</td>
-            <td class="text-center">1 200,00 €</td>
-            <td class="text-center">
+        <tbody *ngIf="invoices$">
+          <tr *ngFor="let invoice of invoices$ | async">
+            <td>{{ invoice.id }}</td>
+            <td>{{ invoice.customer_name }}</td>
+            <td>{{ invoice.description }}</td>
+            <td>{{ invoice.created_at | date }}</td>
+            <td>{{ invoice.total | currency : 'CHF' }}</td>
+            <!-- <td>
               <span class="badge bg-success"> Payée </span>
+            </td> -->
+
+            <td>
+              <span> {{ invoice.status }} </span>
             </td>
+
             <td>
               <a routerLink="/invoices/1" class="btn btn-sm btn-primary">
                 Modifier
@@ -40,7 +50,14 @@ import { Component, OnInit } from '@angular/core';
   styles: [],
 })
 export class InvoicesListComponent implements OnInit {
-  constructor() {}
+  invoices$!: Observable<Invoice[]>;
+  invoices!: any[];
 
-  ngOnInit(): void {}
+  constructor(private invoiceService: invoiceService) {}
+
+  ngOnInit(): void {
+    console.log('INVOICES$ : ', this.invoiceService.findAll());
+
+    this.invoices$ = this.invoiceService.findAll();
+  }
 }

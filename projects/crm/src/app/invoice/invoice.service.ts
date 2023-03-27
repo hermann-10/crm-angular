@@ -44,9 +44,9 @@ export class invoiceService {
         }
 
         findAll() {
-            return this.http.get<Invoice[]>(
-              API_URL + '/invoice'
-            );
+        
+          return this.http.get<Invoice[]>(API_URL + '/invoice');
+          
         }
 
         find(id: number){

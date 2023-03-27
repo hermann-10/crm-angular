@@ -12,6 +12,8 @@ export type Invoice = {
   id?: number;
   customer_name: string;
   description: string;
+  created_at: Date;
   status: InvoiceStatus;
   details: InvoiceDetails;
+  total: string;
 };
