@@ -28,19 +28,29 @@ import { invoiceService } from '../invoice.service';
             <td>{{ invoice.description }}</td>
             <td>{{ invoice.created_at | date }}</td>
             <td>{{ invoice.total | currency : 'CHF' }}</td>
-            <!-- <td>
-              <span class="badge bg-success"> Payée </span>
-            </td> -->
 
-            <td>
-              <span> {{ invoice.status }} </span>
+            <td *ngIf="invoice.status === 'SENT'">
+              <span class="badge bg-dark">Envoyé</span>
+            </td>
+
+            <td *ngIf="invoice.status === 'PAID'">
+              <span class="badge bg-success">Payé</span>
+            </td>
+
+            <td *ngIf="invoice.status === 'CANCELED'">
+              <span class="badge bg-danger">Annulé</span>
             </td>
 
             <td>
-              <a routerLink="/invoices/1" class="btn btn-sm btn-primary">
+              <a
+                routerLink="/invoices/"
+                class="btn btn-sm btn-primary disabled"
+              >
                 Modifier
               </a>
-              <button class="btn btn-sm ms-1 btn-danger">Supprimer</button>
+              <button class="btn btn-sm ms-1 btn-danger disabled">
+                Supprimer
+              </button>
             </td>
           </tr>
         </tbody>
@@ -51,13 +61,17 @@ import { invoiceService } from '../invoice.service';
 })
 export class InvoicesListComponent implements OnInit {
   invoices$!: Observable<Invoice[]>;
-  invoices!: any[];
 
   constructor(private invoiceService: invoiceService) {}
 
   ngOnInit(): void {
     console.log('INVOICES$ : ', this.invoiceService.findAll());
-
     this.invoices$ = this.invoiceService.findAll();
+
+    this.invoices$.subscribe({
+      
+    })
+       
+
   }
 }
