@@ -40,3 +40,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# ignore the file where there is data of database
+**/src/environments/environment.ts
+**/src/environments/environment.prod.ts
