@@ -7,11 +7,13 @@ import { AppComponent } from './app.component';
 import { AuthService, TOKEN_MANAGER } from './auth/auth.service';
 import { LocalStorageTokenManager, SessionStorageTokenManager } from './auth/token-manager.service';
 import { SharedModule } from './shared/shared.module';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { AuthGuard } from './auth/auth.guard';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PageNotFoundComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, SharedModule],
-  providers: [AuthService, { provide: TOKEN_MANAGER, useClass: LocalStorageTokenManager}],
+  providers: [AuthGuard, AuthService, { provide: TOKEN_MANAGER, useClass: LocalStorageTokenManager}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
