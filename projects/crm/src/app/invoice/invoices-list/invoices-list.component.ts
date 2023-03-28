@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Invoice } from '../invoice';
 import { invoiceService } from '../invoice.service';
 
@@ -7,7 +7,29 @@ import { invoiceService } from '../invoice.service';
   selector: 'app-invoices-list',
   template: `
     <div class="bg-light p-3 rounded">
-      <h1>Liste de vos factures</h1>
+      <div class="row">
+        <div class="col-6"><h1>Liste de vos factures</h1></div>
+        <!--<div class="col-6 text-right">
+          <button class="btn btn-sm btn-primary" routerLink="/invoices/create">
+            Créer une facture
+          </button>
+        </div>-->
+        <div class="col-6">
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="sortInvoicesByDateAsc()"
+          >
+            Trier par date (ASC)<i class="fas fa-sort-amount-down"></i>
+          </button>
+
+          <button
+            class="btn btn-sm btn-primary"
+            (click)="sortInvoicesByDateDesc()"
+          >
+            Trier par date (DESC)<i class="fas fa-sort-amount-down"></i>
+          </button>
+        </div>
+      </div>
       <hr />
       <table class="table table-hover">
         <thead>
@@ -67,11 +89,28 @@ export class InvoicesListComponent implements OnInit {
   ngOnInit(): void {
     console.log('INVOICES$ : ', this.invoiceService.findAll());
     this.invoices$ = this.invoiceService.findAll();
+    this.sortInvoicesByDateDesc();
+  }
 
-    this.invoices$.subscribe({
-      
-    })
-       
+  sortInvoicesByDateDesc() {
+    this.invoices$ = this.invoices$.pipe(
+      map((invoices) =>
+        invoices.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )
+      )
+    );
+  }
 
+  sortInvoicesByDateAsc() {
+    this.invoices$ = this.invoices$.pipe(
+      map((invoices) =>
+        invoices.sort(
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        )
+      )
+    );
   }
 }
