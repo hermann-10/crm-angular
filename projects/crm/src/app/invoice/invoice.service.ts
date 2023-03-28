@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { switchMap, tap } from "rxjs";
+import { Observable, switchMap, tap } from "rxjs";
 import { environment } from "../../environments/environment";
 import { AuthService } from "../auth/auth.service";
 import { Invoice } from "./invoice";
@@ -43,10 +43,8 @@ export class invoiceService {
           API_URL + '/invoice/'+ id)   
         }
 
-        findAll() {
-        
+        findAll(): Observable<Invoice[]> {
           return this.http.get<Invoice[]>(API_URL + '/invoice');
-          
         }
 
         find(id: number){
