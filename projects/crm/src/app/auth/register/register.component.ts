@@ -74,7 +74,7 @@ import { AuthService, RegisterData } from '../auth.service';
           />
           <p class="invalid-feedback">
             Le mot de passe est obligatoire, doit faire 8 caractères minimum et
-            contenir au moins un chiffre
+            contenir au moins un chiffre et une lettre
           </p>
         </div>
         <div>
@@ -139,11 +139,14 @@ export class RegisterComponent implements OnInit {
         [this.uniqueEmailAsyncValidator.bind(this)],
       ],
       name: ['', [Validators.required, Validators.minLength(5)]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.pattern(/\d+/),
-      ]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.pattern(/\d+/),
+        ],
+      ],
       confirmPassword: ['', [Validators.required]],
     },
     {
