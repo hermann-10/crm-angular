@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
@@ -14,8 +15,8 @@ const routes: Routes = [
       import('./invoice/invoice.module').then((module) => module.InvoiceModule),
       canActivate: [AuthGuard]
   },
-  //{ path: '', redirectTo: '/invoices', pathMatch: 'full' },
-  //{ path: '**', component: PageNotFoundComponent },
+  { path: '', redirectTo: '/invoices', pathMatch: 'full' },
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
