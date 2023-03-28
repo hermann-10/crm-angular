@@ -72,13 +72,13 @@ import { invoiceService } from '../invoice.service';
               >
                 Voir
               </a>
-              <!--<button
+              <button
               type="button"
                 class="btn btn-sm ms-1 btn-danger"
                 (click)="deleteInvoice(invoice.id!)"
               >
                 Supprimer
-              </button>-->
+              </button>
             </td>
           </tr>
         </tbody>
@@ -121,7 +121,7 @@ export class InvoicesListComponent implements OnInit {
   }
 
   deleteInvoice(id: number) {
-    this.invoiceService.delete(id);
+    this.invoiceService.delete(id).subscribe();
     console.log('Invoice n°', id, 'deleted.');
   }
 }
