@@ -15,19 +15,19 @@ import { InvoiceFormType } from './invoice-form-type';
   selector: 'app-invoice-form',
   template: `
     <form [formGroup]="invoiceForm" (submit)="onSubmit()">
-      <app-invoice-form-general [parent]=invoiceForm></app-invoice-form-general>
-      
+      <app-invoice-form-general
+        [parent]="invoiceForm"
+      ></app-invoice-form-general>
 
       <hr />
 
       <h3>Détails de la facture</h3>
 
-      <app-invoice-form-details 
-        (details-added)="onAddDetails()" 
-        (details-removded)="onRemoveDetails($event)" 
+      <app-invoice-form-details
+        (details-added)="onAddDetails()"
+        (details-removded)="onRemoveDetails($event)"
         [parent]="invoiceForm"
       ></app-invoice-form-details>
-
 
       <hr />
 
@@ -41,9 +41,8 @@ import { InvoiceFormType } from './invoice-form-type';
   styles: [],
 })
 export class InvoiceFormComponent implements OnInit {
-
   @Output('invoice-submit') invoiceSubmitEvent = new EventEmitter<Invoice>();
-  
+
   detailsExistsValidator: ValidatorFn = (control: AbstractControl) => {
     const details = control.get('details') as FormArray;
 
@@ -65,7 +64,13 @@ export class InvoiceFormComponent implements OnInit {
           amount: FormControl;
           quantity: FormControl;
         }>
-      >([]),
+      >([
+        this.fb.group({
+          amount: [],
+          description: [''],
+          quantity: [],
+        }),
+      ]),
     },
     {
       validators: this.detailsExistsValidator,
@@ -86,8 +91,6 @@ export class InvoiceFormComponent implements OnInit {
     }, 0);
   }
 
- 
-
   onAddDetails() {
     this.details.push(
       this.fb.group({
@@ -103,11 +106,9 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   onSubmit() {
-
-    if(this.invoiceForm.invalid){
+    if (this.invoiceForm.invalid) {
       return;
     }
     this.invoiceSubmitEvent.emit(this.invoiceForm.value as Invoice);
   }
-
 }
