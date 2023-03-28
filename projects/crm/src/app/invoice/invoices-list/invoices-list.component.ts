@@ -48,7 +48,7 @@ import { invoiceService } from '../invoice.service';
             <td>{{ invoice.id }}</td>
             <td>{{ invoice.customer_name }}</td>
             <td>{{ invoice.description }}</td>
-            <td>{{ invoice.created_at | date }}</td>
+            <td>{{ invoice.created_at |  date: 'short': undefined : 'fr' }}</td> 
             <td>{{ invoice.total | currency : 'CHF' }}</td>
 
             <td *ngIf="invoice.status === 'SENT'">
