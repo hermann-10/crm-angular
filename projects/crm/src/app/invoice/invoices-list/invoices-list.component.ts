@@ -48,7 +48,9 @@ import { invoiceService } from '../invoice.service';
             <td>{{ invoice.id }}</td>
             <td>{{ invoice.customer_name }}</td>
             <td>{{ invoice.description }}</td>
-            <td>{{ invoice.created_at |  date: 'short': undefined : 'fr' }}</td> 
+            <td>
+              {{ invoice.created_at | date : 'short' : undefined : 'fr' }}
+            </td>
             <td>{{ invoice.total | currency : 'CHF' }}</td>
 
             <td *ngIf="invoice.status === 'SENT'">
@@ -65,14 +67,18 @@ import { invoiceService } from '../invoice.service';
 
             <td>
               <a
-                routerLink="/invoices/"
-                class="btn btn-sm btn-primary disabled"
+                routerLink="/invoices/{{ invoice.id }}"
+                class="btn btn-sm btn-primary"
               >
-                Modifier
+                Voir
               </a>
-              <button class="btn btn-sm ms-1 btn-danger disabled">
+              <!--<button
+              type="button"
+                class="btn btn-sm ms-1 btn-danger"
+                (click)="deleteInvoice(invoice.id!)"
+              >
                 Supprimer
-              </button>
+              </button>-->
             </td>
           </tr>
         </tbody>
@@ -112,5 +118,10 @@ export class InvoicesListComponent implements OnInit {
         )
       )
     );
+  }
+
+  deleteInvoice(id: number) {
+    this.invoiceService.delete(id);
+    console.log('Invoice n°', id, 'deleted.');
   }
 }

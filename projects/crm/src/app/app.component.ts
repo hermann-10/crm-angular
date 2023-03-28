@@ -25,12 +25,9 @@ import { AuthService } from './auth/auth.service';
             <ng-container *authenticated="true">
               <li class="nav-item">
                 <a class="nav-link" routerLink="/invoices">Factures</a>
-                <!-- Available soon -->
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="/invoices/create">+ Créer</a>
-            
-                <!-- Available soon -->
+                <a class="nav-link" routerLink="/invoices/create">Créer une facture</a>
               </li>
             </ng-container>
           </ul>

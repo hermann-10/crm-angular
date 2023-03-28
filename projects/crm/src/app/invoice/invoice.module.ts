@@ -11,13 +11,17 @@ import { InvoiceFormComponent } from './invoice-form/invoice-form.component';
 import { InvoiceFormGeneralComponent } from './invoice-form/invoice-form-general.component';
 import { InvoiceFormDetailsComponent } from './invoice-form/invoice-form-details.component';
 import { InvoiceFormTotalsComponent } from './invoice-form/invoice-form-totals.component';
+import { invoiceService } from './invoice.service';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
+import { InvoiceDetailComponent } from './invoice-detail/invoice-detail.component';
 
 registerLocaleData(localeFr);
 
 const routes: Routes = [
   { path: '', component: InvoicesListComponent },
   { path: 'create', component: InvoiceCreationComponent },
-  { path: ':id', component: InvoiceEditionComponent },
+  { path: ':id', component: InvoiceDetailComponent },
 ];
 
 @NgModule({
@@ -29,7 +33,13 @@ const routes: Routes = [
     InvoiceFormGeneralComponent,
     InvoiceFormDetailsComponent,
     InvoiceFormTotalsComponent,
+    InvoiceDetailComponent
   ],
-  imports: [CommonModule, RouterModule.forChild(routes), ReactiveFormsModule],
+  imports: [CommonModule, RouterModule.forChild(routes), ReactiveFormsModule, HttpClientModule],
+  providers: [invoiceService, AuthInterceptor,  {
+    provide: HTTP_INTERCEPTORS,
+    multi: true,
+    useClass: AuthInterceptor,
+  }] 
 })
 export class InvoiceModule {}
