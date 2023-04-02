@@ -21,7 +21,7 @@ registerLocaleData(localeFr);
 const routes: Routes = [
   { path: '', component: InvoicesListComponent },
   { path: 'create', component: InvoiceCreationComponent },
-  { path: ':id', component: InvoiceDetailComponent },
+  { path: ':id', component: InvoiceEditionComponent },
 ];
 
 @NgModule({

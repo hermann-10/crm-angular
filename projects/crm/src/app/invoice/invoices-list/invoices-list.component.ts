@@ -70,7 +70,7 @@ import { InvoiceService } from '../invoice.service';
                 routerLink="/invoices/{{ invoice.id }}"
                 class="btn btn-sm btn-primary"
               >
-                Voir
+                Modifier
               </a>
               <button
                 type="button"

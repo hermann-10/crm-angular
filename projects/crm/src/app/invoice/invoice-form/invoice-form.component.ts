@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -42,6 +42,9 @@ import { InvoiceFormType } from './invoice-form-type';
 })
 export class InvoiceFormComponent implements OnInit {
   @Output('invoice-submit') invoiceSubmitEvent = new EventEmitter<Invoice>();
+
+  @Input()
+  invoice?: Invoice;
 
   detailsExistsValidator: ValidatorFn = (control: AbstractControl) => {
     const details = control.get('details') as FormArray;
