@@ -34,7 +34,10 @@ import { AuthService, RegisterData } from '../auth.service';
             id="name"
             class="mb-3 form-control"
           />
-          <p class="invalid-feedback">Le nom d'utilisateur est obligatoire</p>
+          <p class="invalid-feedback">
+            Le nom d'utilisateur est obligatoire et doit faire minimum 5
+            caractères
+          </p>
         </div>
         <div>
           <label class="mb-1" for="email">Adresse email</label>
