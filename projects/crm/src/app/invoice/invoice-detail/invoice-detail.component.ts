@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Observable } from 'rxjs';
 import { Invoice } from '../invoice';
-import { invoiceService } from '../invoice.service';
+import { InvoiceService } from '../invoice.service';
 
 @Component({
   selector: 'app-invoice-detail',
@@ -12,7 +12,9 @@ import { invoiceService } from '../invoice.service';
 
       <h3>Description : {{ invoice.description }}</h3>
 
-      <h4>Créé le {{ invoice.created_at | date : 'short' : undefined : 'fr' }}</h4>
+      <h4>
+        Créé le {{ invoice.created_at | date : 'short' : undefined : 'fr' }}
+      </h4>
 
       <h4>Total : {{ invoice.total | currency : 'CHF' }}</h4>
 
@@ -49,7 +51,7 @@ export class InvoiceDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private invoiceService: invoiceService
+    private invoiceService: InvoiceService
   ) {}
 
   ngOnInit(): void {

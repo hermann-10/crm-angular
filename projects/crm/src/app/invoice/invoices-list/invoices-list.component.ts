@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Invoice } from '../invoice';
-import { invoiceService } from '../invoice.service';
+import { InvoiceService } from '../invoice.service';
 
 @Component({
   selector: 'app-invoices-list',
@@ -73,7 +73,7 @@ import { invoiceService } from '../invoice.service';
                 Voir
               </a>
               <button
-              type="button"
+                type="button"
                 class="btn btn-sm ms-1 btn-danger"
                 (click)="deleteInvoice(invoice.id!)"
               >
@@ -90,7 +90,7 @@ import { invoiceService } from '../invoice.service';
 export class InvoicesListComponent implements OnInit {
   invoices$!: Observable<Invoice[]>;
 
-  constructor(private invoiceService: invoiceService) {}
+  constructor(private invoiceService: InvoiceService) {}
 
   ngOnInit(): void {
     console.log('INVOICES$ : ', this.invoiceService.findAll());

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Invoice } from '../invoice';
-import { invoiceService } from '../invoice.service';
+import { InvoiceService } from '../invoice.service';
 
 @Component({
   selector: 'app-invoice-creation',
@@ -23,23 +23,24 @@ import { invoiceService } from '../invoice.service';
 })
 export class InvoiceCreationComponent implements OnInit {
   errorMessage = '';
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
-  constructor(private service:invoiceService, private router : Router, private route: ActivatedRoute){
+  constructor(
+    private service: InvoiceService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  }
-
-  onSubmit(invoiceData: Invoice){
+  onSubmit(invoiceData: Invoice) {
     this.service.create(invoiceData).subscribe({
-      next: () => this.router.navigate(['../'], {
-        relativeTo: this.route,
-      }),
-      error: (error: any) => this.errorMessage = "Une erreur est survenue, merci de réessayer plus tard",
-    })
-    console.log('invoiceData : ',invoiceData);
+      next: () =>
+        this.router.navigate(['../'], {
+          relativeTo: this.route,
+        }),
+      error: (error: any) =>
+        (this.errorMessage =
+          'Une erreur est survenue, merci de réessayer plus tard'),
+    });
+    console.log('invoiceData : ', invoiceData);
   }
-
- 
 }
