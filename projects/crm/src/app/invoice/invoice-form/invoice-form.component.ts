@@ -82,7 +82,13 @@ export class InvoiceFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!this.invoice) {
+      return;
+    }
+
+    this.invoiceForm.patchValue(this.invoice);
+  }
 
   get details() {
     return this.invoiceForm.controls.details;

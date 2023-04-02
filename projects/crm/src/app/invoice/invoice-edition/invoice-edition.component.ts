@@ -17,7 +17,11 @@ import { map, switchMap } from 'rxjs';
         {{ errorMessage }}
       </p>
 
-      <app-invoice-form (invoice-submit)="onSubmit($event)"></app-invoice-form>
+      <app-invoice-form
+        *ngIf="invoice"
+        [invoice]="invoice"
+        (invoice-submit)="onSubmit($event)"
+      ></app-invoice-form>
     </div>
   `,
   styles: [],
@@ -38,7 +42,10 @@ export class InvoiceEditionComponent implements OnInit {
         switchMap((id) => this.invoiceService.find(+id!))
       )
       .subscribe((invoice: any) => {
+        console.log('INVOICE EDITION COMPONENT');
+        console.log(invoice);
         this.invoice = invoice;
+        //console.log('this.invoice', this.invoice);
       });
   }
 
