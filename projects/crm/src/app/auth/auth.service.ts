@@ -17,11 +17,15 @@ export type LoginData = {
 
 export type LoginApiResponse = { authToken: string };
 
-export const TOKEN_MANAGER = new InjectionToken('La classe à injecter pour stocker le token');
+export const TOKEN_MANAGER = new InjectionToken(
+  'La classe à injecter pour stocker le token'
+);
 
 @Injectable()
 export class AuthService {
-  authStatus$ = new BehaviorSubject(false);
+  // Ce Subject est un Observable qu'on pourra suivre et écouter partout dans l'application
+  // Il permet d'être au courant de l'état de l'authentification
+  authStatus$ = new BehaviorSubject<boolean>(false);
 
   register(registerData: RegisterData) {
     return this.http.post(
@@ -40,7 +44,7 @@ export class AuthService {
       )
       .pipe(
         map((response) => response.exists),
-        map((exists) => (exists ? { uniqueEmail: true} : null))
+        map((exists) => (exists ? { uniqueEmail: true } : null))
       );
   }
 
@@ -63,6 +67,12 @@ export class AuthService {
   logout() {
     this.authStatus$.next(false);
     this.tokenManager.removeToken();
+  }
+
+  // On expose un getter qui retourne un Observable qui contient le token, il sera utile dans le AuthInterceptor
+  // et pourquoi pas à d'autres endroits où le token sera nécessaire
+  get authToken$() {
+    return this.tokenManager.loadToken();
   }
 
   constructor(
