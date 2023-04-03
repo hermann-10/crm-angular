@@ -33,12 +33,11 @@ import { InvoiceFormType } from './invoice-form-type';
 
       <app-invoice-form-totals [total]="total"></app-invoice-form-totals>
 
-      <!--<button class="mt-3 w-sm-auto btn btn-success disabled" id="submit">
-        Enregistrer
-      </button>-->
+      <div class="d-flex">
+        <button class="w-sm-auto btn btn-success " id="submit">
+          Enregistrer
+        </button>
 
-
-      <div class="mt-3">
         <a class="btn btn-secondary" routerLink="/invoices"
           >Retour à la liste
         </a>
@@ -50,8 +49,7 @@ import { InvoiceFormType } from './invoice-form-type';
 export class InvoiceFormComponent implements OnInit {
   @Output('invoice-submit') invoiceSubmitEvent = new EventEmitter<Invoice>();
 
-  @Input()
-  invoice?: Invoice;
+  @Input() invoice?: Invoice;
 
   detailsExistsValidator: ValidatorFn = (control: AbstractControl) => {
     const details = control.get('details') as FormArray;
