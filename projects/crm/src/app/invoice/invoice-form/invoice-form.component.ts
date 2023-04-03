@@ -36,6 +36,13 @@ import { InvoiceFormType } from './invoice-form-type';
       <!--<button class="mt-3 w-sm-auto btn btn-success disabled" id="submit">
         Enregistrer
       </button>-->
+
+
+      <div class="mt-3">
+        <a class="btn btn-secondary" routerLink="/invoices"
+          >Retour à la liste
+        </a>
+      </div>
     </form>
   `,
   styles: [],
