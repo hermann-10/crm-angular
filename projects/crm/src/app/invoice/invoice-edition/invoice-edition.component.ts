@@ -8,7 +8,7 @@ import { map, switchMap } from 'rxjs';
   selector: 'app-invoice-edition',
   template: `
     <div class="bg-light p-5 rounded">
-      <h1>Modifier une facture</h1>
+      <h1>Vue détaillé d'une facture</h1>
       <p class="alert bg-info text-white">
         Remplissez les informations de la facture afin de la retrouver dans
         votre liste plus tard !

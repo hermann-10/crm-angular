@@ -33,9 +33,9 @@ import { InvoiceFormType } from './invoice-form-type';
 
       <app-invoice-form-totals [total]="total"></app-invoice-form-totals>
 
-      <button class="mt-3 w-sm-auto btn btn-success" id="submit">
+      <!--<button class="mt-3 w-sm-auto btn btn-success disabled" id="submit">
         Enregistrer
-      </button>
+      </button>-->
     </form>
   `,
   styles: [],

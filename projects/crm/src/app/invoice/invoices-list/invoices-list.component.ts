@@ -70,11 +70,11 @@ import { InvoiceService } from '../invoice.service';
                 routerLink="/invoices/{{ invoice.id }}"
                 class="btn btn-sm btn-primary"
               >
-                Modifier
+                Voir
               </a>
               <button
                 type="button"
-                class="btn btn-sm ms-1 btn-danger"
+                class="btn btn-sm ms-1 btn-danger disabled"
                 (click)="deleteInvoice(invoice.id!)"
               >
                 Supprimer
