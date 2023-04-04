@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Subject, takeUntil, Observable, map, Subscription } from 'rxjs';
 import { Invoice } from '../invoice';
 import { InvoiceService } from '../invoice.service';
 
@@ -7,8 +7,12 @@ import { InvoiceService } from '../invoice.service';
   selector: 'app-invoices-list',
   template: `
     <div class="bg-light p-3 rounded">
+      <h1>Liste de vos factures</h1>
+      <div class="alert bg-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
       <div class="row">
-        <div class="col-6"><h1>Liste de vos factures</h1></div>
+        <div class="col-6"></div>
         <!--<div class="col-6 text-right">
           <button class="btn btn-sm btn-primary" routerLink="/invoices/create">
             Créer une facture
@@ -43,8 +47,8 @@ import { InvoiceService } from '../invoice.service';
             <th></th>
           </tr>
         </thead>
-        <tbody *ngIf="invoices$">
-          <tr *ngFor="let invoice of invoices$ | async">
+        <tbody>
+          <tr *ngFor="let invoice of invoices">
             <td>{{ invoice.id }}</td>
             <td>{{ invoice.customer_name }}</td>
             <td>{{ invoice.description }}</td>
@@ -74,7 +78,7 @@ import { InvoiceService } from '../invoice.service';
               </a>
               <button
                 type="button"
-                class="btn btn-sm ms-1 btn-danger disabled"
+                class="btn btn-sm ms-1 btn-danger"
                 (click)="deleteInvoice(invoice.id!)"
               >
                 Supprimer
@@ -88,18 +92,32 @@ import { InvoiceService } from '../invoice.service';
   styles: [],
 })
 export class InvoicesListComponent implements OnInit {
+  errorMessage = '';
   invoices$!: Observable<Invoice[]>;
+  invoices: Invoice[] = [];
+  destroy$ = new Subject();
+  deleteSub?: Subscription;
+  findAllSub?: Subscription;
 
   constructor(private invoiceService: InvoiceService) {}
 
   ngOnInit(): void {
-    console.log('INVOICES$ : ', this.invoiceService.findAll());
     this.invoices$ = this.invoiceService.findAll();
+
+    this.findAllSub = this.invoiceService
+      .findAll()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (invoices) => (this.invoices = invoices),
+        error: () =>
+          (this.errorMessage =
+            'Il y a eu un problème lors de la récupération des factures'),
+      });
     this.sortInvoicesByDateDesc();
   }
 
   sortInvoicesByDateDesc() {
-    this.invoices$ = this.invoices$.pipe(
+    this.invoices$.pipe(
       map((invoices) =>
         invoices.sort(
           (a, b) =>
@@ -110,7 +128,7 @@ export class InvoicesListComponent implements OnInit {
   }
 
   sortInvoicesByDateAsc() {
-    this.invoices$ = this.invoices$.pipe(
+    this.invoices$.pipe(
       map((invoices) =>
         invoices.sort(
           (a, b) =>
@@ -121,7 +139,27 @@ export class InvoicesListComponent implements OnInit {
   }
 
   deleteInvoice(id: number) {
-    this.invoiceService.delete(id).subscribe();
+    const oldInvoices = [...this.invoices];
+
+    this.invoices = this.invoices.filter((item) => item.id !== id);
+
+    this.deleteSub = this.invoiceService
+      .delete(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {},
+        error: () => {
+          this.errorMessage =
+            'Il y a eu un problème lors de la suppression de la facture';
+          this.invoices = oldInvoices;
+        },
+      });
+
     console.log('Invoice n°', id, 'deleted.');
+  }
+
+  ngOnDestroy() {
+    this.findAllSub?.unsubscribe();
+    this.deleteSub?.unsubscribe();
   }
 }
