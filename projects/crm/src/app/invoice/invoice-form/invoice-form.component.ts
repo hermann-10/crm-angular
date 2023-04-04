@@ -63,8 +63,8 @@ export class InvoiceFormComponent implements OnInit {
 
   invoiceForm: InvoiceFormType = this.fb.group(
     {
-      customer_name: ['', [Validators.required, Validators.minLength(5)]],
-      description: ['', [Validators.required, Validators.minLength(5)]],
+      customer_name: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', [Validators.required, Validators.minLength(3)]],
       status: [''],
       details: this.fb.array<
         FormGroup<{

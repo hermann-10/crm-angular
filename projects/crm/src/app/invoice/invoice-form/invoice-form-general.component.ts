@@ -18,7 +18,7 @@ import { InvoiceFormType } from './invoice-form-type';
           class="form-control mb-3"
         />
         <p class="invalid-feedback">
-          La description est obligatoire et doit faire au moins 5 caractères !
+          La description est obligatoire et doit faire au moins 3 caractères !
         </p>
       </div>
       <div class="col">
@@ -33,7 +33,7 @@ import { InvoiceFormType } from './invoice-form-type';
           class="form-control mb-3"
         />
         <p class="invalid-feedback">
-          Le client est obligatoire et doit faire au moins 5 caractères !
+          Le client est obligatoire et doit faire au moins 3 caractères !
         </p>
       </div>
       <div class="col">
