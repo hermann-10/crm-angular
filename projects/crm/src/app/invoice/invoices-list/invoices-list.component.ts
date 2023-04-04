@@ -18,7 +18,7 @@ import { InvoiceService } from '../invoice.service';
             Créer une facture
           </button>
         </div>-->
-        <div class="col-6">
+        <!--<div class="col-6">
           <button
             class="btn btn-sm btn-primary"
             (click)="sortInvoicesByDateAsc()"
@@ -32,7 +32,7 @@ import { InvoiceService } from '../invoice.service';
           >
             Trier par date (DESC)<i class="fas fa-sort-amount-down"></i>
           </button>
-        </div>
+        </div>-->
       </div>
       <hr />
       <table class="table table-hover">
@@ -113,10 +113,10 @@ export class InvoicesListComponent implements OnInit {
           (this.errorMessage =
             'Il y a eu un problème lors de la récupération des factures'),
       });
-    this.sortInvoicesByDateDesc();
+    //this.sortInvoicesByDateDesc();
   }
 
-  sortInvoicesByDateDesc() {
+  /*sortInvoicesByDateDesc() {
     this.invoices$.pipe(
       map((invoices) =>
         invoices.sort(
@@ -125,9 +125,9 @@ export class InvoicesListComponent implements OnInit {
         )
       )
     );
-  }
+  }*/
 
-  sortInvoicesByDateAsc() {
+  /*sortInvoicesByDateAsc() {
     this.invoices$.pipe(
       map((invoices) =>
         invoices.sort(
@@ -136,7 +136,7 @@ export class InvoicesListComponent implements OnInit {
         )
       )
     );
-  }
+  }*/
 
   deleteInvoice(id: number) {
     const oldInvoices = [...this.invoices];
