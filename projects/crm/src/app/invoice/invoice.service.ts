@@ -44,6 +44,6 @@ export class InvoiceService {
   }
 
   find(id: number) {
-    return this.http.get(API_URL + '/invoice/' + id);
+    return this.http.get<Invoice>(API_URL + '/invoice/' + id);
   }
 }

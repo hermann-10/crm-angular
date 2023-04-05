@@ -31,7 +31,7 @@ export class InvoiceEditionComponent implements OnInit {
   //invoice?: Invoice;
 
   // L'observable qui contiendra dans le futur la facture récupérée sur Xano
-  invoice$?: Observable<any>; //<Invoice>; //to type the observable in the future
+  invoice$?: Observable<Invoice>;
   invoiceId?: number;
 
   constructor(
