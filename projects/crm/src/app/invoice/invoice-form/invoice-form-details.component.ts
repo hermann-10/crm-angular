@@ -6,17 +6,23 @@ import { InvoiceFormType } from './invoice-form-type';
   selector: 'app-invoice-form-details',
   template: `
     <ng-container [formGroup]="parent" *ngIf="parent && details">
+      <h3>Détails de la facture</h3>
       <div class="alert bg-warning text-white" *ngIf="details.length === 0">
         <p>Vous devez ajouter des détails à votre facture</p>
-        <button type="button" class="btn btn-sm btn-outline-light" (click)="detailsAddedEvent.emit()">
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-light"
+          (click)="detailsAddedEvent.emit()"
+          id="add-detail-initial"
+        >
           + Ajouter ma première ligne
         </button>
       </div>
       <section formArrayName="details">
         <div
           class="detail-row"
-          *ngFor="let group of details.controls; let i = index"
           [formGroup]="group"
+          *ngFor="let group of details.controls; let i = index"
         >
           <div class="row mb-3">
             <div class="col-7">
@@ -68,7 +74,8 @@ import { InvoiceFormType } from './invoice-form-type';
               <button
                 type="button"
                 class="btn w-auto d-block btn-sm btn-danger"
-                (click)="detailsRemovedEvent.emit(i)"
+                (click)="removeDetailEvent.emit(i)"
+                id="remove-detail-{{ i }}"
               >
                 X
               </button>
@@ -80,6 +87,7 @@ import { InvoiceFormType } from './invoice-form-type';
           class="btn btn-primary btn-sm"
           type="button"
           (click)="detailsAddedEvent.emit()"
+          id="add-detail"
         >
           + Ajouter une ligne
         </button>
@@ -89,11 +97,11 @@ import { InvoiceFormType } from './invoice-form-type';
   styles: [],
 })
 export class InvoiceFormDetailsComponent {
-  @Output('details-removded') detailsRemovedEvent = new EventEmitter<number>();
+  @Input('parent') parent?: InvoiceFormType;
 
-  @Output('details-added') detailsAddedEvent = new EventEmitter();
+  @Output('add-detail') detailsAddedEvent = new EventEmitter();
 
-  @Input() parent?: InvoiceFormType;
+  @Output('remove-detail') removeDetailEvent = new EventEmitter<number>();
 
   get details() {
     return this.parent?.controls.details;

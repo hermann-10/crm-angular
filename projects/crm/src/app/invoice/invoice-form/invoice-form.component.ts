@@ -21,26 +21,28 @@ import { InvoiceFormType } from './invoice-form-type';
 
       <hr />
 
-      <h3>Détails de la facture</h3>
-
       <app-invoice-form-details
-        (details-added)="onAddDetails()"
-        (details-removded)="onRemoveDetails($event)"
         [parent]="invoiceForm"
+        (add-detail)="onAddDetail()"
+        (remove-detail)="onRemoveDetail($event)"
       ></app-invoice-form-details>
 
       <hr />
 
       <app-invoice-form-totals [total]="total"></app-invoice-form-totals>
 
-      <div class="d-flex">
-        <button class="w-sm-auto btn btn-success " id="submit">
-          Enregistrer
-        </button>
+      <div class="text-center">
+        <div class="d-flex">
+          <button class="w-sm-auto btn btn-success " id="submit">
+            Enregistrer
+          </button>
 
-        <a class="btn btn-secondary" routerLink="/invoices"
-          >Retour à la liste
-        </a>
+          <a class="btn btn-secondary" routerLink="/invoices"
+            >Retour à la liste
+          </a>
+
+          <app-invoice-generate></app-invoice-generate>
+        </div>
       </div>
     </form>
   `,
@@ -61,7 +63,14 @@ export class InvoiceFormComponent implements OnInit {
         };
   };
 
-  invoiceForm: InvoiceFormType = this.fb.group(
+  invoiceForm: InvoiceFormType = this.fb.group({
+    customer_name: ['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required, Validators.minLength(3)]],
+    status: ['SENT'],
+    details: this.fb.array<FormGroup>([]),
+  });
+
+  /*invoiceForm: InvoiceFormType = this.fb.group(
     {
       customer_name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(3)]],
@@ -74,16 +83,16 @@ export class InvoiceFormComponent implements OnInit {
         }>
       >([
         this.fb.group({
-          amount: [],
+          amount: [''],
           description: [''],
-          quantity: [],
+          quantity: [''],
         }),
       ]),
     },
     {
       validators: this.detailsExistsValidator,
     }
-  );
+  );*/
 
   constructor(private fb: FormBuilder) {}
 
@@ -92,7 +101,16 @@ export class InvoiceFormComponent implements OnInit {
       return;
     }
 
+    this.invoice.details.forEach((item) => this.onAddDetail());
+
     this.invoiceForm.patchValue(this.invoice);
+
+    console.log('details ?: ', this.details.value);
+
+    console.log(
+      'this.invoiceForm.controls.details.value ?: ',
+      this.invoiceForm.controls.details.value
+    );
   }
 
   get details() {
@@ -105,21 +123,22 @@ export class InvoiceFormComponent implements OnInit {
     }, 0);
   }
 
-  onAddDetails() {
+  onAddDetail() {
     this.details.push(
       this.fb.group({
-        description: ['', [Validators.required, Validators.minLength(5)]],
-        amount: ['', [Validators.required, Validators.min(0)]],
-        quantity: ['', [Validators.required, Validators.min(0)]],
+        description: ['', [Validators.required, Validators.minLength(3)]],
+        amount: ['', [Validators.required, Validators.minLength(0)]],
+        quantity: ['', [Validators.required, Validators.minLength(0)]],
       })
     );
   }
 
-  onRemoveDetails(index: number) {
+  onRemoveDetail(index: number) {
     this.details.removeAt(index);
   }
 
   onSubmit() {
+    console.log('this.invoiceForm.value:', this.invoiceForm.value);
     if (this.invoiceForm.invalid) {
       return;
     }

@@ -15,12 +15,15 @@ import { InvoiceService } from './invoice.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { InvoiceDetailComponent } from './invoice-detail/invoice-detail.component';
+import { InvoiceGenerateComponent } from './invoice-generate/invoice-generate.component';
+
 
 registerLocaleData(localeFr);
 
 const routes: Routes = [
   { path: '', component: InvoicesListComponent },
   { path: 'create', component: InvoiceCreationComponent },
+  { path: 'detail/:id', component: InvoiceDetailComponent },
   { path: ':id', component: InvoiceEditionComponent },
 ];
 
@@ -34,6 +37,8 @@ const routes: Routes = [
     InvoiceFormDetailsComponent,
     InvoiceFormTotalsComponent,
     InvoiceDetailComponent,
+    InvoiceGenerateComponent
+    
   ],
   imports: [
     CommonModule,

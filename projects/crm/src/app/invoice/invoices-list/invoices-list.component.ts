@@ -53,7 +53,7 @@ import { InvoiceService } from '../invoice.service';
             <td>{{ invoice.customer_name }}</td>
             <td>{{ invoice.description }}</td>
             <td>
-              {{ invoice.created_at | date : 'short' : undefined : 'fr' }}
+              {{ invoice.created_at | date : 'dd/MM/yyyy' : undefined : 'fr' }}
             </td>
             <td>{{ invoice.total | currency : 'CHF' }}</td>
 
@@ -70,6 +70,12 @@ import { InvoiceService } from '../invoice.service';
             </td>
 
             <td>
+              <a
+                routerLink="/invoices/detail/{{ invoice.id }}"
+                class="btn btn-sm btn-primary"
+              >
+                Voir
+              </a>
               <a
                 routerLink="/invoices/{{ invoice.id }}"
                 class="btn btn-sm btn-primary"
